@@ -53,18 +53,18 @@ var referralRecommendation = ""
 var isComplete = false
 var binaryInput = "";
 
-//process input data
+// user input function
+async function userInput() {
+    
+    const readline = require('readline').createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+    function askQuestion(query) {
+        return new Promise(resolve => readline.question(query, ans => resolve(ans)));
+    };
 
-function askQuestion(query) {
-    return new Promise(resolve => readline.question(query, ans => resolve(ans)));
-}
-
-async function main() {
     // Give option to enter input a 14 digit binary code instead of answering questions
     const binaryInput = await askQuestion("Enter a 14 digit binary code if you have one (e.g., 1100000000000): ");
         if (binaryInput.length !== 14 || !/^[01]+$/.test(binaryInput)) {
@@ -102,11 +102,11 @@ async function main() {
             isMHTInvolved = binaryInput[13] === '1';
         }
     
- 
+    readline.close();
+}
 
-
-
-    // Impression and recommendation logic
+// logical function
+function logic() {
     while (isComplete == false) {
 
         // no antipsychotic check
@@ -276,9 +276,11 @@ async function main() {
             referralRecommendation = ref6;
         }
     }
+}
 
+// output function
+function outputResults() {
     // Output the results of the logic only if not blank
-
     function printIfNotBlank(label, value) {
         if (value && value.trim() !== "") {
             console.log("> " + label + ": " + value);
@@ -293,8 +295,8 @@ async function main() {
     printIfNotBlank("Referral Recommendation", referralRecommendation);
     console.log("");
 
-    // Output the summary of the input data only if true
 
+    // Output the summary of the input data only if true
     function printIfTrue(label, value) {
         if (value) {
             console.log("> " + label + ": " + value);
@@ -318,7 +320,7 @@ async function main() {
     console.log("");
 
     // Output a binary summary of the input data that is a single line of text
-   
+
     const binarySummary = [
         isEndOfLife ? "1" : "0",
         isPsychiatricDx ? "1" : "0",
@@ -337,12 +339,13 @@ async function main() {
     ].join("");
     console.log("Input code: " + binarySummary);
     console.log("");
-    console.log("== End of Logic ==");
+    console.log("== End of logic ==");
 
-
-    readline.close();
 }
 
-main();
+// Run the functions in order
+userInput();
+logic();
+outputResults();
 
 //test git
