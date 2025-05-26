@@ -8,7 +8,7 @@ const aprec1 = "Continue current antipsychotics."
 const aprec2 = "Continue current antipsychotic and reassess in 3 months."
 const aprec3 = "Trial taper of current antipsychotics using Gradual Dose Reduction (GDR)."
 const aprec4 = "Recommend discontinuation of antipsychotics."  
-const aprec5 = "Recommendations for starting antipsychotics is beyong the scope of this tool."
+const aprec5 = "Consider gradual taper of antipsychotics to minimize side effects."
 const aprec0 = ""
 
 const nonpharm1 = "Optimize non-pharmacological approaches for behaviors."
@@ -24,6 +24,7 @@ const ref3 = "Contact Mental Health Team about current concerns."
 const ref4 = "No indication for referral to Geriatric Psychiatry at this time."
 const ref5 = "Consider referral to Geriatric Psychiatry if behaviors persist."
 const ref6 = "Has ongoing Mental Health Team follow-up. Contact them if concerns arise."
+const ref7 = "Consider referral to Geriatric Psychiatry if considering tapering antipsychotics."
 const ref0 = ""
 
 var isPsychiatricDx = false
@@ -162,7 +163,7 @@ function logic() {
         if (isPsychiatricDx == true && isNeurocognitiveDx == true) {
             impression = imp2 + " Has appropriate psychiatric diagnosis with neurocognitive disorder."
             apRecommendation = aprec1
-            referralRecommendation = ref2
+            referralRecommendation = ref7
             isComplete = true
             break;
         }
@@ -198,7 +199,7 @@ function logic() {
 
                     // behavior is present but not AP responsive
                     if (isBehaviorAPResponsive == false) {
-                        impression = imp4 + " Behavior not responsive to antipsychotics."
+                        impression = imp4 + " Behaviors best managed with non-pharmacological approaches. Antipsychotics mainly providing sedation."
                         apRecommendation = aprec3
                         referralRecommendation = ref5
                         isComplete = true
@@ -207,7 +208,7 @@ function logic() {
 
                     // behavior is present and AP responsive
                     if (isBehaviorAPResponsive == true) {
-                        impression = imp2 + " Behavior responsive to antipsychotics."
+                        impression = imp2 + " Behavior responsive to antipsychotics, but need to optimize non-pharmacological approaches."
                         referralRecommendation = ref4
 
                         // non-pharmacological approaches tried check
@@ -250,7 +251,7 @@ function logic() {
 
     //side effect recommendation
     if (apRecommendation == aprec1 && isSideEffect == true) {
-        apRecommendation = aprec3
+        apRecommendation = aprec5
     }
 
     //nonpharmRecommendation
