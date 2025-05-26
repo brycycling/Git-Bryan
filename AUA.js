@@ -122,7 +122,7 @@ function logic() {
 
         // end of life check
         if (isEndOfLife == true) {
-            impression = imp1 + "End of Life."
+            impression = imp1 + " End of Life."
             apRecommendation = aprec1
             referralRecommendation = ref0
             isComplete = true
@@ -131,7 +131,7 @@ function logic() {
 
         // special antipsychotic check
         if (isSpecialAntipsychotic == true) {
-            impression = imp1
+            impression = imp1 + " On special antipsychotic."
             apRecommendation = aprec1
 
             // use of special antipsychotic not needing geriatric psychiatry referral
@@ -152,7 +152,7 @@ function logic() {
 
         // psychiatric diagnosis check
         if (isPsychiatricDx == true && isNeurocognitiveDx == false) {
-            impression = imp1
+            impression = imp1 + " Has appropriate psychiatric diagnosis."
             apRecommendation = aprec1
             referralRecommendation = ref0
             isComplete = true
@@ -160,7 +160,7 @@ function logic() {
         }
 
         if (isPsychiatricDx == true && isNeurocognitiveDx == true) {
-            impression = imp2
+            impression = imp2 + " Has appropriate psychiatric diagnosis with neurocognitive disorder."
             apRecommendation = aprec1
             referralRecommendation = ref2
             isComplete = true
@@ -169,7 +169,7 @@ function logic() {
 
         // other diagnosis check
         if (isOtherDx == true && isNeurocognitiveDx == false) {
-            impression = imp1
+            impression = imp1 + " Has appropriate other diagnosis."
             apRecommendation = aprec1
             referralRecommendation = ref0
             isComplete = true
@@ -186,7 +186,7 @@ function logic() {
 
                 // no behavior present
                 if (isBehaviorPresent == false) {
-                    impression = imp4
+                    impression = imp4 + " No behavior present."
                     apRecommendation = aprec3
                     referralRecommendation = ref0
                     isComplete = true
@@ -198,7 +198,7 @@ function logic() {
 
                     // behavior is present but not AP responsive
                     if (isBehaviorAPResponsive == false) {
-                        impression = imp4
+                        impression = imp4 + " Behavior not responsive to antipsychotics."
                         apRecommendation = aprec3
                         referralRecommendation = ref5
                         isComplete = true
@@ -207,7 +207,7 @@ function logic() {
 
                     // behavior is present and AP responsive
                     if (isBehaviorAPResponsive == true) {
-                        impression = imp2
+                        impression = imp2 + " Behavior responsive to antipsychotics."
                         referralRecommendation = ref4
 
                         // non-pharmacological approaches tried check
