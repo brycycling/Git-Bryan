@@ -153,8 +153,14 @@ const rl = readline.createInterface({
 
 async function categorize() {
     const diagnoses = await new Promise((resolve) => {
-        rl.question("Enter a list of diagnoses (comma separated): ", (input) => {
-            resolve(input.split(',').map(d => d.trim().toLowerCase()));
+        rl.question("Enter a list of diagnoses (comma, space, or line separated): ", (input) => {
+            // Split by comma, space, or line break, remove empty entries
+            resolve(
+                input
+                    .split(/[\s,]+/)
+                    .map(d => d.trim().toLowerCase())
+                    .filter(Boolean)
+            );
         });
     });
     //remove punctuation from diagnoses
@@ -175,8 +181,13 @@ async function categorize() {
 
     // ask user to input list of medications in terminal
     const medications = await new Promise((resolve) => {
-        rl.question("Enter a list of medications (comma separated): ", (input) => {
-            resolve(input.split(',').map(m => m.trim().toLowerCase()));
+        rl.question("Enter a list of medications (comma, space, or line separated): ", (input) => {
+            resolve(
+                input
+                    .split(/[\s,]+/)
+                    .map(d => d.trim().toLowerCase())
+                    .filter(Boolean)
+            );
         });
     });
 
@@ -189,8 +200,78 @@ async function categorize() {
         }
     });
 
+    // ask uder to input behaviors in terminal
+    const behaviors = await new Promise((resolve) => {
+        rl.question("Enter a list of behaviors (comma, space, or line separated): ", (input) => {
+            resolve(
+                input
+                    .split(/[\s,]+/)
+                    .map(d => d.trim().toLowerCase())
+                    .filter(Boolean)
+            );
+        });
+    });
 
+    // ask user to input if behaviors are 1) ongoing, 2) stable less than 3 months, or 3) stable more than 3 months, by given 3 options and then take in put as 1, 2, or 3
+    const behaviorStability = await new Promise((resolve) => {
+        rl.question("Enter the stability of behaviors (1: ongoing | 2: stable < 3 months | 3: stable > 3 months): ", (input) => {
+            const value = parseInt(input);
+            if ([1, 2, 3].includes(value)) {
+                resolve(value);
+            } else {
+                console.log("Invalid input. Please enter 1, 2, or 3.");
+                resolve(1); // default to ongoing
+            }
+        });
+    });
 
+    // set behavior stability variables based on input
+    if (behaviorStability === 1) {
+        isBehaviorOngoing = true;
+        isBehaviorStableLess3Months = false;
+        isBehaviorStableMore3Months = false;
+    } else if (behaviorStability === 2) {
+        isBehaviorOngoing = false;
+        isBehaviorStableLess3Months = true;
+        isBehaviorStableMore3Months = false;
+    } else if (behaviorStability === 3) {
+        isBehaviorOngoing = false;
+        isBehaviorStableLess3Months = false;
+        isBehaviorStableMore3Months = true;
+    }
+
+    // ask user if non-pharmacological treatment has been tried
+    const nonpharmTried = await new Promise((resolve) => {
+        rl.question("Has non-pharmacological treatment been tried? (yes/no): ", (input) => {
+            resolve(input.trim().toLowerCase() === 'yes');
+        });
+    });
+    isNonpharmTried = nonpharmTried;
+    // ask user if side effects are present
+    const sideEffectPresent = await new Promise((resolve) => {
+        rl.question("Are there any side effects present? (yes/no): ", (input) => {
+            resolve(input.trim().toLowerCase() === 'yes');
+        });
+    });
+    isSideEffectPresent = sideEffectPresent;
+    // ask user if MHT is involved
+    const mhtInvolved = await new Promise((resolve) => {
+        rl.question("Is the Mental Health Team (MHT) involved? (yes/no): ", (input) => {
+            resolve(input.trim().toLowerCase() === 'yes');
+        });
+    });
+    isMHTInvolved = mhtInvolved;
+    
+    // identify if behaviors are present, responsive to antipsychotics
+    behaviors.forEach(behavior => {
+        if (BEHAVIOR_RESPONSIVE.some(b => b.includes(behavior))) {
+            isBehaviorPresent = true;
+            isBehaviorAPResponsive = true;
+        } else if (BEHAVIOR_NON_RESPONSIVE.some(b => b.includes(behavior))) {
+            isBehaviorPresent = true;
+            isBehaviorAPResponsive = false;
+        }
+    });
 
     printCategorizationResults();
 
@@ -204,16 +285,21 @@ function printCategorizationResults() {
     console.log("Other Diagnosis:", isOtherDx);
     console.log("End of Life Diagnosis:", isEndOfLife);
     console.log("");
-    console.log("MHT Involved:", isMHTInvolved);
+    
     console.log("Special Antipsychotic:", isSpecialAntipsychotic);
     console.log("Any Antipsychotic:", isAnyAntipsychotic);
+    console.log("");
     console.log("Behavior Present:", isBehaviorPresent);
     console.log("Behavior AP Responsive:", isBehaviorAPResponsive);
     console.log("Behavior Ongoing:", isBehaviorOngoing);
     console.log("Behavior Stable Less than 3 Months:", isBehaviorStableLess3Months);
     console.log("Behavior Stable More than 3 Months:", isBehaviorStableMore3Months);
+    console.log("");
+
     console.log("Non-pharmacological Treatment Tried:", isNonpharmTried);
     console.log("Side Effect Present:", isSideEffect);
+    console.log("MHT Involved:", isMHTInvolved);
+    console.log("");
 
     rl.close();
 }
