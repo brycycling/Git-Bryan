@@ -119,7 +119,7 @@ function logic() {
 
         // end of life check
         if (isEndOfLife == true) {
-            impression = imp1
+            impression = imp1 + "End of Life."
             apRecommendation = aprec1
             referralRecommendation = ref0
             isComplete = true
