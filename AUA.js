@@ -53,17 +53,19 @@ var referralRecommendation = ""
 var isComplete = false
 var binaryInput = "";
 
+const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+function askQuestion(query) {
+    return new Promise(resolve => readline.question(query, ans => resolve(ans)));
+};
+
 // user input function
 async function userInput() {
     
-    const readline = require('readline').createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
 
-    function askQuestion(query) {
-        return new Promise(resolve => readline.question(query, ans => resolve(ans)));
-    };
 
     // Give option to enter input a 14 digit binary code instead of answering questions
     const binaryInput = await askQuestion("Enter a 14 digit binary code if you have one (e.g., 1100000000000): ");
@@ -101,7 +103,8 @@ async function userInput() {
             isSideEffect = binaryInput[12] === '1';
             isMHTInvolved = binaryInput[13] === '1';
         }
-    
+    logic(); // Call the logic function to process the input
+    outputResults(); // Call the output function to display the results
     readline.close();
 }
 
@@ -345,7 +348,5 @@ function outputResults() {
 
 // Run the functions in order
 userInput();
-logic();
-outputResults();
 
 //test git
