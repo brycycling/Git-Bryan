@@ -200,7 +200,7 @@ function logic() {
 
                     // behavior is present but not AP responsive
                     if (isBehaviorAPResponsive == false) {
-                        impression = imp4 + " Behaviors best managed with non-pharmacological approaches. Antipsychotics mainly providing sedation."
+                        impression = imp4 + " Behaviors best managed with non-pharmacological approaches. Antipsychotics mainly causing sedation."
                         apRecommendation = aprec3
                         referralRecommendation = ref5
                         isComplete = true
@@ -209,12 +209,12 @@ function logic() {
 
                     // behavior is present and AP responsive
                     if (isBehaviorAPResponsive == true) {
-                        impression = imp2 + " Behavior responsive to antipsychotics, but need to optimize non-pharmacological approaches."
+                        impression = imp2 + " Behavior may be responsive to antipsychotics, but need to optimize non-pharmacological approaches."
                         referralRecommendation = ref4
 
-                        // non-pharmacological approaches tried check
+                        // behavior present, AP responsive, but non-pharm approaches not tried
                         if (isNonpharmTried == false) {
-                            impression = imp3
+                            impression = imp3 + " Behavior may be responsive to antipsychotics, but non-pharmacological approaches need to be tried first."
                             nonpharmRecommendation = nonpharm1
                         }
 
@@ -223,6 +223,7 @@ function logic() {
                         // behavior ongoing
                         if (isBehaviorOngoing == true) {
                             apRecommendation = aprec2
+                            referralRecommendation = ref5
                             isComplete = true
                             break;
                         }
