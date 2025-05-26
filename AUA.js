@@ -64,11 +64,12 @@ function askQuestion(query) {
 };
 
 // user input function
-async function userInput() {
+async function main() {
     
 
 
     // Give option to enter input a 14 digit binary code instead of answering questions
+    
     const binaryInput = await askQuestion("Enter a 14 digit binary code if you have one (e.g., 1100000000000): ");
         if (binaryInput.length !== 14 || !/^[01]+$/.test(binaryInput)) {
             console.log("Invalid code. Please answer the following questions with 'y' for yes or 'n' for no.");
@@ -348,6 +349,6 @@ function outputResults() {
 }
 
 // Run the functions in order
-userInput();
+main();
 
 //test git
