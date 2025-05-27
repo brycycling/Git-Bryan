@@ -85,9 +85,7 @@ async function main() {
             isBehaviorOngoing= (await askQuestion("Is Behavior Ongoing? (y/n): ")).toLowerCase() === 'y';
             isBehaviorStableLess3Months = (await askQuestion("Is Behavior Stable for Less Than 3 Months? (y/n): ")).toLowerCase() === 'y';
             isBehaviorStableMore3Months = (await askQuestion("Is Behavior Stable for More Than 3 Months? (y/n): ")).toLowerCase() === 'y';
-            isNonpharmTried = (await askQuestion("Has Non-Pharmacological Approaches Been Tried? (y/n): ")).toLowerCase() === 'y';
-            isSideEffect = (await askQuestion("Is Side Effect? (y/n): ")).toLowerCase() === 'y';
-            isMHTInvolved = (await askQuestion("Is MHT Involved? (y/n): ")).toLowerCase() === 'y';
+            
             readline.close();
         } else {
             isEndOfLife = binaryInput[0] === '1';

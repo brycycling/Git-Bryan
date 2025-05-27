@@ -195,6 +195,7 @@ async function categorize() {
     medications.forEach(medication => {
         if (SPECIAL_ANTIPSYCHOTICS.some(m => m.includes(medication))) {
             isSpecialAntipsychotic = true;
+            isAnyAntipsychotic = true;
         } else if (REGULAR_ANTIPSYCHOTICS.some(m => m.includes(medication))) {
             isAnyAntipsychotic = true;
         }
@@ -240,27 +241,17 @@ async function categorize() {
         isBehaviorStableMore3Months = true;
     }
 
-    // ask user if non-pharmacological treatment has been tried
-    const nonpharmTried = await new Promise((resolve) => {
-        rl.question("Has non-pharmacological treatment been tried? (yes/no): ", (input) => {
-            resolve(input.trim().toLowerCase() === 'yes');
-        });
-    });
-    isNonpharmTried = nonpharmTried;
-    // ask user if side effects are present
-    const sideEffectPresent = await new Promise((resolve) => {
-        rl.question("Are there any side effects present? (yes/no): ", (input) => {
-            resolve(input.trim().toLowerCase() === 'yes');
-        });
-    });
-    isSideEffectPresent = sideEffectPresent;
-    // ask user if MHT is involved
-    const mhtInvolved = await new Promise((resolve) => {
-        rl.question("Is the Mental Health Team (MHT) involved? (yes/no): ", (input) => {
-            resolve(input.trim().toLowerCase() === 'yes');
-        });
-    });
-    isMHTInvolved = mhtInvolved;
+
+    function askQuestion(query) {
+    return new Promise(resolve => rl.question(query, ans => resolve(ans)));
+    };
+
+    isEndOfLife = (await askQuestion("Is End of Life? (y/n): ")).toLowerCase() === 'y';
+    isNonpharmTried = (await askQuestion("Has Non-Pharmacological Approaches Been Tried? (y/n): ")).toLowerCase() === 'y';
+    isSideEffect = (await askQuestion("Is Side Effect? (y/n): ")).toLowerCase() === 'y';
+    isMHTInvolved = (await askQuestion("Is MHT Involved? (y/n): ")).toLowerCase() === 'y';
+    
+
     
     // identify if behaviors are present, responsive to antipsychotics
     behaviors.forEach(behavior => {
@@ -273,7 +264,7 @@ async function categorize() {
         }
     });
 
-    printCategorizationResults();
+
 
 }    
 
@@ -303,5 +294,10 @@ function printCategorizationResults() {
 
     rl.close();
 }
-categorize();
 
+async function main() {
+    await categorize();
+    printCategorizationResults();
+}
+
+main(); 
